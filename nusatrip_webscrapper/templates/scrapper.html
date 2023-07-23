@@ -1,0 +1,167 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="final-ui">
+    <div class="rectangle-12"></div>
+    <div class="rectangle-13"></div>
+    <div class="rectangle-15">
+      {{ table | safe }}
+      <div id="progress-bar">
+        <span id="progress-value">{{ progress_value }}</span>
+      </div>
+    </div>
+    
+    <form id="scrapper-form" action="/scrapper" method="POST">
+      <input class="rectangle-21" value="" name="from" placeholder="From">
+      <input class="rectangle-16" value="" name="to" placeholder="To">
+      <input class="rectangle-17" value="" name="depart" placeholder="Depart">
+      <input class="rectangle-20" value="" name="cabin" placeholder="Cabin">
+      <input class="rectangle-18" value="" name="platform" placeholder="Platform"></input>
+      <p><button class="rectangle-19">Search</button></p>
+    </form>
+
+    <form action="http://localhost:5000/download" method="POST">
+      <p><a href="http://localhost:5000/download" class="download-data-as-csv">Download data as CSV</a></p>
+    </form>
+  </div>
+
+  <script>
+    // // Display the progress bar when the form is submitted
+    // document.getElementById('scrapper-form').addEventListener('submit', function() {
+    //   document.getElementById('progress-bar').style.display = 'block';
+    // });
+
+    // // Hide the progress bar once the page is fully loaded
+    // window.addEventListener('load', function() {
+    //   document.getElementById('progress-bar').style.display = 'none';
+    // });
+
+    // // Update the value of the progress bar
+    // function updateProgressBar(value) {
+    //   document.getElementById('progress-value').textContent = value + '%';
+    // }
+    // src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    // Display the progress bar when the form is submitted
+    document.getElementById('scrapper-form').addEventListener('submit', function() {
+      document.getElementById('progress-bar').style.display = 'block';
+    });
+
+    // Hide the progress bar once the page is fully loaded
+    window.addEventListener('load', function() {
+      document.getElementById('progress-bar').style.display = 'none';
+    });
+
+    function fetchProgressValue() {
+      axios.get('/api/progress_value')
+        .then(function(response) {
+          var progressValue = response.data.progress_value;
+          document.getElementById('progress-value').textContent = progressValue;
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    }
+
+    // Fetch the progress value initially
+    fetchProgressValue();
+
+    // Set interval to fetch the progress value every 10 seconds
+    setInterval(fetchProgressValue, 1);
+    
+    // Add this code to make a GET request on page load
+    window.addEventListener('load', function() {
+      axios.get('/api/progress_value')
+        .then(function(response) {
+          var progressValue = response.data.progress_value;
+          document.getElementById('progress-value').textContent = progressValue;
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    });
+  </script>
+</body>
+</html>
+ -->
+
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+ </head>
+ <body>
+   <div class="final-ui">
+     <div class="rectangle-12"></div>
+     <div class="rectangle-13"></div>
+     <div class="rectangle-15">
+        <div id="table-container">
+          {{ table | safe }}
+        </div>
+       <span id="progress-value">{{ progress_value }}</span>
+       <div id="progress-bar">
+          <div id="progress-spinner"></div>
+       </div>
+     </div>
+     
+     <form id="scrapper-form" action="/scrapper" method="POST">
+       <input class="rectangle-21" value="" name="from" placeholder="From">
+       <input class="rectangle-16" value="" name="to" placeholder="To">
+       <input class="rectangle-17" value="" name="depart" placeholder="Depart">
+       <input class="rectangle-20" value="" name="cabin" placeholder="Cabin">
+       <input class="rectangle-18" value="" name="platform" placeholder="Platform"></input>
+       <p><button class="rectangle-19">Search</button></p>
+     </form>
+ 
+     <form action="http://localhost:5000/download" method="POST">
+       <p><a href="http://localhost:5000/download" class="download-data-as-csv">Download data as CSV</a></p>
+     </form>
+   </div>
+ 
+   <script>
+     // Display the progress bar when the form is submitted
+     document.getElementById('scrapper-form').addEventListener('submit', function() {
+       document.getElementById('progress-bar').style.display = 'block';
+     });
+ 
+     // Hide the progress bar once the page is fully loaded
+     window.addEventListener('load', function() {
+       document.getElementById('progress-bar').style.display = 'none';
+     });
+ 
+ 
+     function fetchProgressValue() {
+        axios
+          .get('/api/progress_value')
+          .then(function(response) {
+            var progressValue = response.data.progress_value;
+            var progressBar = document.getElementById('progress-bar');
+            var progressValueElement = document.getElementById('progress-value');
+
+            // Check if the progress bar is visible
+            if (window.getComputedStyle(progressBar).display !== 'none') {
+              progressValueElement.style.visibility = 'visible';
+            } else {
+              progressValueElement.style.visibility = 'hidden';
+            }
+
+            progressValueElement.textContent = progressValue;
+          })
+          .catch(function(error) {
+            console.error(error);
+          });
+      }
+     // Fetch the progress value initially
+     fetchProgressValue();
+ 
+     // Set interval to fetch the progress value every 10 seconds
+     setInterval(fetchProgressValue, 1000);
+   </script>
+ </body>
+ </html>
+ 

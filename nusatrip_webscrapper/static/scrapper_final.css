@@ -1,0 +1,270 @@
+.final-ui-scrapper, .final-ui-scrapper * {
+    box-sizing: border-box;
+    }
+.final-ui-scrapper {
+   width: 1920px;
+    height: 1080px;
+    position: relative;
+   }
+
+.rectangle-12 {
+   background: #ffffff;
+    border-radius: 25px;
+    width: 1920px;
+    height: 1080px;
+    position: absolute;
+    left: 0px;
+   top: 0px;
+   }
+
+.rectangle-13 {
+   background: #004360;
+    border-radius: 0px 0px 25px 25px;
+    width: 1920px;
+    height: 400px;
+    position: absolute;
+    left: 0px;
+   top: 0px;
+   }
+
+.group-3 {
+   position: absolute;
+    inset: 0;
+   }
+
+.rectangle-22 {
+   background: #fefcfc;
+    border-radius: 25px;
+    width: 66px;
+    height: 6.82px;
+    position: absolute;
+    left: 1740px;
+   top: 77px;
+   }
+
+.rectangle-23 {
+   background: #fefcfc;
+    border-radius: 25px;
+    width: 66px;
+    height: 6.82px;
+    position: absolute;
+    left: 1740px;
+   top: 96.09px;
+   }
+
+.rectangle-24 {
+   background: #fefcfc;
+    border-radius: 25px;
+    width: 66px;
+    height: 6.82px;
+    position: absolute;
+    left: 1740px;
+   top: 115.18px;
+   }
+
+.nusatrip-logo-color-1 {
+   width: 300px;
+    height: 63px;
+    position: absolute;
+    left: 127px;
+   top: 68px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+   }
+
+.rectangle-15 {
+   background: #c2bfbf;
+    border-radius: 25px;
+    width: 1679px;
+    height: 520px;
+    position: absolute;
+    left: 121px;
+   top: 560px;
+   }
+
+.rectangle-16 {
+   background: #f6f5f5;
+    border-radius: 25px;
+    width: 1679px;
+    height: 520px;
+    position: absolute;
+    left: 121px;
+   top: 560px;
+   }
+
+.group-2 {
+   position: absolute;
+    inset: 0;
+   }
+
+.rectangle-17 {
+   background: #ffffff;
+    width: 250px;
+    height: 130px;
+    position: absolute;
+    left: 665px;
+   top: 180px;
+   }
+
+.group-1 {
+   width: 1679px;
+    height: 130px;
+    position: static;
+   }
+
+.rectangle-20 {
+   background: #ffffff;
+    width: 250px;
+    height: 130px;
+    position: absolute;
+    left: 936px;
+   top: 180px;
+   }
+
+.rectangle-18 {
+   background: #ffffff;
+    border-radius: 0px 25px 25px 0px;
+    width: 250px;
+    height: 130px;
+    position: absolute;
+    left: 1203px;
+   top: 180px;
+   }
+
+.rectangle-21 {
+   background: #ffffff;
+    border-radius: 25px 0px 0px 25px;
+    width: 250px;
+    height: 130px;
+    position: absolute;
+    left: 127px;
+   top: 180px;
+   }
+
+.rectangle-19 {
+   background: #000000;
+    border-radius: 25px;
+    width: 311px;
+    height: 130px;
+    position: absolute;
+    left: 1495px;
+   top: 180px;
+   }
+
+.search {
+   color: #ffffff;
+    text-align: left;
+    font: 400 36px 'Inter', sans-serif;
+    position: absolute;
+    left: 1593px;
+   top: 223px;
+   }
+
+.depart {
+   color: #000000;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 688px;
+   top: 201px;
+   }
+
+.cabin {
+   color: #000000;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 959px;
+   top: 201px;
+   }
+
+.platform {
+   color: #000000;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 1228px;
+   top: 201px;
+   }
+
+.from {
+   color: #000000;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 156px;
+   top: 201px;
+   }
+
+.anywhere {
+   color: #817474;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 156px;
+   top: 245px;
+   }
+
+.rectangle-162 {
+   background: #ffffff;
+    width: 250px;
+    height: 130px;
+    position: absolute;
+    left: 397px;
+   top: 180px;
+   }
+
+.to {
+   color: #000000;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 420px;
+   top: 201px;
+   }
+
+.anywhere2 {
+   color: #817474;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 420px;
+   top: 245px;
+   }
+
+.anytime {
+   color: #817474;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 688px;
+   top: 245px;
+   }
+
+.all-cabin {
+   color: #817474;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 959px;
+   top: 245px;
+   }
+
+.all-platforms {
+   color: #817474;
+    text-align: left;
+    font: 400 30px 'Inter', sans-serif;
+    position: absolute;
+    left: 1228px;
+   top: 245px;
+   }
+
+.download-data-as-csv {
+   color: #655e5e;
+    text-align: left;
+    font: 400 36px 'Inter', sans-serif;
+    text-decoration: underline;
+    position: absolute;
+    left: 1425px;
+   top: 458px;
+   }
+

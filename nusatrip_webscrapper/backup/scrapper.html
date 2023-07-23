@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="final-ui">
+    <div class="rectangle-12"></div>
+    <div class="rectangle-13"></div>
+    <div class="rectangle-15"></div>
+
+    
+    
+    <form action = "http://localhost:5000/scrapper" method = "POST">
+
+      <input class="rectangle-21" value="" name="from" placeholder="From">
+      <input class="rectangle-16" value ="" name="to" placeholder="to">
+      <input class="rectangle-17" value="" name="depart" placeholder="Depart">
+      <input class="rectangle-20" value="" name="cabin" placeholder="Cabin">
+      <input class="rectangle-18" value="" name="platform" placeholder="Platform"></input>
+      <p><button class="rectangle-19">Search</button></p>
+
+    </form>
+
+    <form action="http://localhost:5000/download" method="POST">
+
+      <p><a href="http://localhost:5000/download" class="download-data-as-csv">Download data as csv</a></p>
+
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

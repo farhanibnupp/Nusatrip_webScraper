@@ -1,0 +1,66 @@
+@media screen and (max-width: 600px) {
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    
+  }
+  
+  .form-text{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.rectangle-13 {
+    background: #004360;
+    border-radius: 0px 0px 25px 25px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    left: 0px;
+    top: 0px;
+    padding-top: 75px;
+    padding-bottom: 85px;
+    width: 100vw;
+    /* margin-left: 0;
+    margin-right: 0; */
+    padding-right: 20;
+  }
+
+.input-style{
+  background-color: #ffff;
+  padding-bottom: '10px';
+  /* border-color: #004360; */
+  /* border: 10; */
+  border-radius: 25px 0px 0px 25px;
+}
+.input-style :focus{
+  outline-color: invert;
+}
+
+.tombol{
+  padding-top: 10px;
+}
+.download{
+  text-align: right;
+  padding-right: 25px;
+  padding-top: 20px;
+  font-size: 25px;
+  /* height: 100vh; */
+  position: "fixed";
+}
+.table{
+  padding :  0px 70px 0px 70px;
+}
+/* .rectangle-13 .form-container .form-text .MuiOutlinedInput-root {
+  border: none;
+}
+.rectangle-13 .form-text .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+.rectangle-13 .form-text .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-radius: 5px !important;
+} */
+
