@@ -12,6 +12,7 @@ export default function MyApp() {
   const [check, setCheck] = useState(false);
   return (
     <>
+    
      <div>
       <Barnav/>
     </div>

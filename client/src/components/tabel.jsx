@@ -33,10 +33,11 @@ export default function BasicTable({setCheck, check}) {
 
   // const [nyala, setNyala] = useState(false);
 
-// useEffect(() => {
-//   // Fetch the data when the component mounts
-//   fetchData();
-// }, []);
+useEffect(() => {
+  // Fetch the data when the component mounts
+  fetchData();
+}, []);
+
 useEffect(() => {
   // Fetch the data when the component mounts
 

@@ -2,21 +2,19 @@ import concurrent.futures
 import subprocess
 import time
 from datetime import datetime
-
+import pandas as pd
 import pytz
 from ex_connect import insert_jobDateex, get_dataex
 from insert_parameter import insert_dataex
 
-from flask import Flask, jsonify,request
+from flask import Flask, jsonify,request, url_for, send_file
 from flask_cors import CORS
 import mysql.connector
+import random
+import os
 
 app = Flask(__name__)
 CORS(app)
-
-
-
-
 
 def run_file(file_name):
     # Jalankan file Python
@@ -25,7 +23,7 @@ def run_file(file_name):
 
 @app.route('/scrapper' , methods=['POST', 'GET'])
 def param() :
-    global START_DATE,formatted_date,  PERIODS, DEPARTURE,DESTINATION, to_labels, PLATFORM
+    global START_DATE,formatted_date,  PERIODS, DEPARTURE ,DESTINATION, to_labels, PLATFORM, formatted_date
     if request.method == 'POST':
         START_DATE = request.json.get('START_DATE1')
         start_date_obj = datetime.strptime(START_DATE, '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -49,6 +47,7 @@ def param() :
 
 @app.route('/printData' , methods=['GET'])
 def table():
+    # global tableData
     if request.method == 'GET':
         table = get_dataex('t_flight_rates', notif=False)
         t_job = get_dataex('T_JOB', notif=False)
@@ -60,24 +59,58 @@ def table():
         # get_dataex("t_flight_rates")
         # print(jsonify(tableData))
         return (jsonify(tableData))
+    
+
+@app.route('/download', methods=['GET'])
+def download():   
+    if request.method =='GET':
+        # css_path = url_for('static', filename='styles.css')
+        filename = save()
+        print("performing download")
+        time.sleep(random.uniform(.1,.5))
+
+        return send_file(filename,as_attachment=True, mimetype='text/csv')
+
+def save():
+    print("saving the data...")
+    # Get the current date and time
+    now = datetime.now()
+
+    # Format the date and time as strings
+    formatted_date = now.strftime("%Y%m%d-")  # Format: YYYY-MM-DD
+    formatted_time = now.strftime("%H%M%S")  # Format: HH:MM:SS
+
+    # Join the date and time strings
+    datetime_string = formatted_date + " " + formatted_time
+
+    table = get_dataex('t_flight_rates', notif=False)
+    t_job = get_dataex('T_JOB', notif=False)
+    job_id = list(t_job['ID'])[-1]
+    tableData = table[table['JOB_ID'] == job_id].to_dict(orient='records')
+    
+
+    df = pd.DataFrame(tableData)
+    df.columns = df.columns.str.upper()
+    global time_temp
+    name_temp = f"scraping_result_{formatted_date}_to_{datetime_string}.csv"
+    # name_temp = f"scraping_result_{formatted_date}_to_{DESTINATION}_{datetime_string}.csv"
+    # df.to_csv(name_temp, index=False)
+
+    output_directory = "D:/web_scrapper_merged/nusatrip_webscrapper/"  # Ganti dengan direktori yang Anda inginkan
+
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    output_file_path = os.path.join(output_directory, name_temp)
+    df.to_csv(output_file_path, index=False)
+
+    # name_temp = "scraping_result" + formatted_date + " " +  + " to " + DESTINATION + "-"+ datetime_string + ".csv"
+    # df.to_csv("scraping_result" + formatted_date + " " +  + " to " + DESTINATION + "-"+ datetime_string + ".csv", index=False)
+    print("data saved")
+    print (name_temp)
+    return(name_temp)
 
 # def getTable():
-#     try:
-#         print()
-#         connection = mysql.connector.connect(host='localhost',
-#                                              database="webscrapper_nusatrip",
-#                                              user='root',
-#                                              password='')
-        
-#         cursor = connection.cursor()
-#         sql_select_query = f"select * from {table}"
-
-#         cursor = connection.cursor()
-
-
-#     except mysql.connector.Error as error:
-#         print("Failed to get record from MySQL table: {}".format(error))
-#     print()
 
 
 def main():
