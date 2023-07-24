@@ -8,6 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState,useEffect } from "react";
 import axios from "axios";
+// import Form from "./form";
+
+// import { check, setCheck } from './form';
 
 import "../style/styles4.css";
 
@@ -25,21 +28,37 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function BasicTable() {
+export default function BasicTable({setCheck, check}) {
   const [data, setData] = useState([]);
 
-  const [nyala, setNyala] = useState(false);
+  // const [nyala, setNyala] = useState(false);
 
 // useEffect(() => {
 //   // Fetch the data when the component mounts
-//   // fetchData();
+//   fetchData();
 // }, []);
+useEffect(() => {
+  // Fetch the data when the component mounts
+
+}, [check]);
+
+useEffect(() => {
+  // Fetch the data when the component mounts
+  if(check){
+    fetchData();
+    setCheck(false);
+  }
+});
 
 const fetchData = async () => {
   try {
+    // if(Form.check){
+    //   const response = await axios.get("http://127.0.0.1:5000/printData");
+    //   setData(response.data);
+    // }
     const response = await axios.get("http://127.0.0.1:5000/printData");
     setData(response.data);
-    setNyala(true);
+    
     // progressValueElement.textContent = data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -52,7 +71,7 @@ const formatDate = (dateString) => {
   return formattedDate;
 };
 
-setInterval(fetchData, 3500);
+// setInterval(fetchData, 3500);
   return (
     <div className="table">
       <TableContainer component={Paper}>

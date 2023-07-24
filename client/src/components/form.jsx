@@ -14,23 +14,35 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 
-const top100Films = ["CGK", "DLH", "TYOA", "SIN", "HND"];
+import tabel from './tabel';
+
+const top100Films = ["CGK", "DLH", "TYOA", "SIN", "HND", "SOC", "DPS"];
 const objOptions = [
   { label: "Traveloka", file_name : "nusatrip_webscrapper/scraper_traveloka.py" },
   { label: "Tkyscanner", file_name : "nusatrip_webscrapper/scraper_skyscanner.py"},
   { label: "Booking", file_name : "nusatrip_webscrapper/scraper_booking.py" },
   { label: "Pegi Pegi", file_name : "nusatrip_webscrapper/scraper_pegi.py" },
 ];
+
+// const [check, getCheck] = useState(false);
+
 const myHelper = {
   auto: {
     required: "Email is Required",
     pattern: "Invalid Email Address",
   },
 };
-const Form = () => {
+const Form = ({ setCheck }) => {
   const { control, handleSubmit } = useForm({
     reValidateMode: "onBlur",
   });
+  
+  // const [check, setCheck] = useState(false);
+
+  // const handleToggle = () => {
+  //   setCheck(!check); // Toggle the state to its opposite value
+  // };
+
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -126,6 +138,7 @@ const Form = () => {
 
   const onSubmit = (data) => {
     // const { formFields, ...formData } = data;
+    // handleToggle();
     const platforms = data.formFields.map((field) =>
     field.PLATFORM1.map((option) => option.file_name)
   );
@@ -146,7 +159,8 @@ const Form = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
+        setCheck(true);
       })
       .catch((error) => {
         console.error(error);
@@ -528,4 +542,5 @@ const Form = () => {
   );
 };
 
+// export {check};
 export default Form;
