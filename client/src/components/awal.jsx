@@ -10,6 +10,10 @@ import { useState } from 'react';
 export default function MyApp() {
 
   const [check, setCheck] = useState(false);
+  const [hideTable, setHideTable ] = useState(false);
+  const updateCheck = (newValue) => {
+    setHideTable(newValue);
+  };
   
   return (
     <>
@@ -18,9 +22,9 @@ export default function MyApp() {
       {/* <Barnav/> */}
     </div>
     <main xs = {{marginTop : 20}}>
-      <Form style = {{position : "fixed"}} setCheck={setCheck} check = {check}/>
+      <Form style = {{position : "fixed"}} setCheck={setCheck} check = {check}  updateCheck = {updateCheck}/>
       <Download/>
-      <Tabel setCheck={setCheck} check = {check}/>
+      <Tabel setCheck={setCheck} check = {check} setHideTable = {setHideTable} hideTable = {hideTable} updateCheck = {updateCheck}/>
     </main>
     </>
   );

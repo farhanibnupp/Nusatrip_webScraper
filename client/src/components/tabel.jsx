@@ -18,6 +18,8 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
+const data2 = []
+
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
@@ -26,44 +28,55 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function BasicTable({ setCheck, check }) {
+export default function BasicTable({ setCheck, check, hideTable, setHideTable,updateCheck  }) {
   const [data, setData] = useState([]);
-  const [hide, setHide] = useState(true);
+  const [hide, setHide] = useState(false);
 
   // const [nyala, setNyala] = useState(false);
 
   useEffect(() => {
     // Fetch the data when the component mounts
-    if(!check){
-      fetchData();
-      // setHide(false);
-    }
-    
-  }, []);
+    fetchData();
+    setCheck(false);
+    // data();
+    console.log("ganss");
+ 
+  }, [hideTable,check]);
 
   // useEffect(() => {
   //   // Fetch the data when the component mounts
   // }, [check]);
 
-  useEffect(() => {
-    // Fetch the data when the component mounts
-    if (check) {
-      fetchData();
-      setCheck(false);
-      setHide(false);
-      // setHide(false)
-    }
-  });
+  // useEffect(() => {
+  //   if (check) {
+
+  //     // setHideTable(false);
+  //     fetchData();
+  //     console.log("halo");
+  //     // setCheck(false);
+  //     // setHide(false);
+  //     // setHide(false)
+  //   }
+   
+  //   // if (check) {
+  //   //   fetchData();
+  //   //   setCheck(false);
+  //   //   // setHide(false);
+  //   //   // setHide(false)
+  //   // }
+  // });
 
   const fetchData = async () => {
     try {
-      // if(Form.check){
-      //   const response = await axios.get("http://127.0.0.1:5000/printData");
-      //   setData(response.data);
-      // }
       const response = await axios.get("http://127.0.0.1:5000/printData");
+
       setData(response.data);
-      // setHide(false);
+      // setHideTable(response.data.length === 0);
+      if(hideTable){
+        setHideTable(false);
+        console.log("haloooooo");
+      }
+      
 
       // progressValueElement.textContent = data;
     } catch (error) {
@@ -85,7 +98,7 @@ export default function BasicTable({ setCheck, check }) {
   // setInterval(fetchData, 3500);
   return (
     <div className="table">
-      {hide ? ( // Tampilkan atau sembunyikan tabel berdasarkan nilai hide
+      {hideTable ? ( // Tampilkan atau sembunyikan tabel berdasarkan nilai hide
         <div className="table-hidden">Tabel sedang bersembunyi...</div>
       ) : (
         <TableContainer component={Paper}>

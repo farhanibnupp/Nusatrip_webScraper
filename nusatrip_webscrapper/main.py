@@ -53,9 +53,8 @@ def table():
         t_job = get_dataex('T_JOB', notif=False)
         job_id = list(t_job['ID'])[-1]
         tableData = table[table['JOB_ID'] == job_id].to_dict(orient='records')
-        print("ini adalah table data")
-        print(tableData)
-
+        # print("ini adalah table data")
+        # print(tableData)
         # get_dataex("t_flight_rates")
         # print(jsonify(tableData))
         return (jsonify(tableData))
