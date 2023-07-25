@@ -53,7 +53,7 @@ function download() {
           <div className="download">
             <p className="text-end">
               <Link onClick={handleDownload}>
-                Download data as csv
+                Download data
               </Link>
             </p>
           </div>

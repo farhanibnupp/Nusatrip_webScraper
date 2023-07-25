@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import {
   TextField,
@@ -13,6 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
+import AppBar from "./appbar";
 
 import tabel from './tabel';
 
@@ -45,10 +46,38 @@ const myHelper = {
     pattern: "Invalid Email Address",
   },
 };
-const Form = ({ setCheck }) => {
+const Form = ({ setCheck,check }) => {
   const { control, handleSubmit } = useForm({
     reValidateMode: "onBlur",
   });
+
+  const [readOnly, setReadOnly] = useState(false)
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [check]);
+
+  useEffect(() => {
+    // Mengubah nilai readOnly berdasarkan nilai check
+    if(check){
+      setReadOnly(true)
+    }else{
+      setReadOnly(false)
+    }
+    
+    
+  } );
+
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get("http://127.0.0.1:5000/printData");
+  //     // setData(response.data);
+  //     setReadOnly(false);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   
   
   // const [check, setCheck] = useState(false);
@@ -171,10 +200,12 @@ const Form = ({ setCheck }) => {
         headers: {
           "Content-Type": "application/json", // Set the Content-Type header to application/json
         },
+        
       })
-      .then((response) => {
+      .then(() => {
         // console.log(response.data);
         setCheck(true);
+        // setReadOnly(true)
       })
       .catch((error) => {
         console.error(error);
@@ -320,12 +351,21 @@ const Form = ({ setCheck }) => {
   };
 
   return (
+    <>
+    <AppBar  onAdd={() => {
+          append({});
+        }}
+        onRemove={() => {
+          if (fields.length >= 1) {
+            remove(fields.length - 1);
+          }
+        }}/>
     <div className="rectangle-13">
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container justifyContent="center" className="form-container">
             <Grid item container xs={10} sm={10} justifyContent="center">
-              <Grid item xs={10} sm = {2} style={{ margin: 5 }}>
+              <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                 <Controller
                   control={control}
                   name="DEPARTURE1"
@@ -342,14 +382,11 @@ const Form = ({ setCheck }) => {
                           fullWidth
                           inputRef={ref}
                           variant="filled"
-                          label="Departure"
-                        />
-                      )}
-                    />
-                  )}
-                />
+                          label="Departure" />
+                      )} />
+                  )} />
               </Grid>
-              <Grid item xs={10} sm= {2} style={{ margin: 5 }}>
+              <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                 <Controller
                   control={control}
                   name="DESTINATION1"
@@ -365,14 +402,11 @@ const Form = ({ setCheck }) => {
                           {...params}
                           fullWidth
                           variant="filled"
-                          label="Destination"
-                        />
-                      )}
-                    />
-                  )}
-                />
+                          label="Destination" />
+                      )} />
+                  )} />
               </Grid>
-              <Grid item xs={10} sm= {2} style={{ margin: 5 }}>
+              <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                 <Controller
                   control={control}
                   name="START_DATE1"
@@ -392,37 +426,11 @@ const Form = ({ setCheck }) => {
                         }}
                         renderInput={(params) => (
                           <TextField {...params} fullWidth variant="filled" />
-                        )}
-                        // renderInput={(params) => {
-                        //   console.log(params);
-                        //   return (
-                        //     <TextField
-                        //       {...params}
-                        //       inputProps={{
-                        //         ...params.inputProps,
-                        //         placeholder: "tt.mm.jjjj"
-                        //       }}
-                        //       variant="filled"
-                        //     />
-                        //   );
-                        // }}
-                        // renderInput={(params) => <TextField placeholder="tt.mm.jjjj" {...params} />}
-                        // renderInput={(params) => (
-                        //   <TextField
-                        //     {...params}
-                        //     // placeholder="Inputkan tanggal" // Tambahkan placeholder di sini
-                        //     fullWidth
-                        //     variant="filled"
-                        //     label="Select Date"
-                        //     placeholder="tt.mm.jjjj"
-                        //   />
-                        // )}
-                      />
+                        )} />
                     </LocalizationProvider>
-                  )}
-                />
+                  )} />
               </Grid>
-              <Grid item xs={10} sm= {2} style={{ margin: 5 }}>
+              <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                 <Controller
                   control={control}
                   name="PERIODS1" // Ubah name menjadi "totalBill" karena ini adalah field "totalBill"
@@ -436,12 +444,10 @@ const Form = ({ setCheck }) => {
                       variant="filled"
                       value={field.value} // Gunakan field.value sebagai nilai input
                       onChange={field.onChange}
-                      inputProps={{ min: 0 }}
-                    />
-                  )}
-                />
+                      inputProps={{ min: 0 }} />
+                  )} />
               </Grid>
-              <Grid item xs={10} sm= {2} style={{ margin: 5 }}>
+              <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                 <Controller
                   control={control}
                   name="PLATFORM1"
@@ -459,34 +465,31 @@ const Form = ({ setCheck }) => {
                           fullWidth
                           inputRef={ref}
                           variant="filled"
-                          label="Platform"
-                        />
-                      )}
-                    />
-                  )}
-                />
+                          label="Platform" />
+                      )} />
+                  )} />
                 {/* <Controller
-                  control={control}
-                  name="PLATFORM1"
-                  render={({ field: { ref, onChange, ...field } }) => (
-                    <Autocomplete
-                      options={top100Films}
-                      placeholder="Platform"
-                      onChange={(_, data) => onChange(data)}
-                      renderInput={(params) => (
-                        <TextField
-                          sx={{ backgroundColor: "white" }}
-                          {...params}
-                          {...field}
-                          fullWidth
-                          inputRef={ref}
-                          variant="filled"
-                          label="Auto-Complete"
-                        />
-                      )}
-                    />
-                  )}
-                /> */}
+      control={control}
+      name="PLATFORM1"
+      render={({ field: { ref, onChange, ...field } }) => (
+        <Autocomplete
+          options={top100Films}
+          placeholder="Platform"
+          onChange={(_, data) => onChange(data)}
+          renderInput={(params) => (
+            <TextField
+              sx={{ backgroundColor: "white" }}
+              {...params}
+              {...field}
+              fullWidth
+              inputRef={ref}
+              variant="filled"
+              label="Auto-Complete"
+            />
+          )}
+        />
+      )}
+    /> */}
               </Grid>
               {renderInputs()}
             </Grid>
@@ -502,41 +505,43 @@ const Form = ({ setCheck }) => {
                 variant="contained"
                 sx={{ fontSize: "12px", height: 50 }}
                 color="primary"
+                
+                disabled={readOnly}
               >
                 Submit
               </Button>
               {/* <Button
-                variant="contained"
-                sx={{ fontSize: "12px", height: 50 }}
-                color="primary"
-                onClick={() => append({})}
-                
-              >
-                +
-              </Button> */}
+      variant="contained"
+      sx={{ fontSize: "12px", height: 50 }}
+      color="primary"
+      onClick={() => append({})}
+      
+    >
+      +
+    </Button> */}
 
-              <Button
+              {/* <Button
                 variant="contained"
                 sx={{ fontSize: "12px", height: 50 }}
                 color="primary"
                 onClick={() => {
                   append({});
                   // setInputCount((prevCount) => prevCount + 1);
-                }}
+                } }
               >
                 +
-              </Button>
-              {/* <Button
-                variant="contained"
-                sx={{ fontSize: "12px", height: 50, marginLeft: 10 }}
-                color="primary"
-                onClick={() => {
-                  if (fields.length > 1) remove(fields.length - 1);
-                }}
-              >
-                -
               </Button> */}
-              <Button
+              {/* <Button
+      variant="contained"
+      sx={{ fontSize: "12px", height: 50, marginLeft: 10 }}
+      color="primary"
+      onClick={() => {
+        if (fields.length > 1) remove(fields.length - 1);
+      }}
+    >
+      -
+    </Button> */}
+              {/* <Button
                 variant="contained"
                 sx={{ fontSize: "12px", height: 50, marginLeft: 10 }}
                 color="primary"
@@ -545,15 +550,15 @@ const Form = ({ setCheck }) => {
                     remove(fields.length - 1);
                     // setInputCount((prevCount) => prevCount - 1);
                   }
-                }}
+                } }
               >
                 -
-              </Button>
+              </Button> */}
             </Grid>
           </Grid>
         </form>
       </div>
-    </div>
+    </div></>
   );
 };
 

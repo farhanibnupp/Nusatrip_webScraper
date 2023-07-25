@@ -10,16 +10,15 @@ import { useState } from 'react';
 export default function MyApp() {
 
   const [check, setCheck] = useState(false);
+  
   return (
     <>
     
      <div>
-      <Barnav/>
+      {/* <Barnav/> */}
     </div>
     <main xs = {{marginTop : 20}}>
-      <Form style = {{position : "fixed"}} setCheck={setCheck}/>
-
-
+      <Form style = {{position : "fixed"}} setCheck={setCheck} check = {check}/>
       <Download/>
       <Tabel setCheck={setCheck} check = {check}/>
     </main>

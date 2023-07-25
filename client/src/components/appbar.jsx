@@ -1,11 +1,13 @@
 import * as React from 'react';
 import logo from '../assets/burung_nusatrip.png';
 import Hamburger from './humberger';
-import { Toolbar, AppBar } from '@mui/material';
+import { Toolbar, AppBar, Stack } from '@mui/material';
 import { useMediaQuery } from 'react-responsive';
+import ButtonGrup from './button.jsx';
 
 
-const Appbar = () => {
+
+const Appbar = ({ onAdd, onRemove }) => {
   const isMobileDevice = useMediaQuery({
     query: "(max-device-width: 480px) and (min-device-width: 320px)",
   });
@@ -28,7 +30,7 @@ const Appbar = () => {
       <AppBar sx={{ bgcolor: '#004360', boxShadow: 'none', paddingX:"50px" }}>
 
       {isMobileDevice && 
-          <Toolbar sx={{ justifyContent: 'flex-end' }}>
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
           <div sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img
               src={logo}
@@ -41,11 +43,14 @@ const Appbar = () => {
               }}
             />
           </div>
-          <Hamburger />
+          <Stack direction="row" spacing={2}>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <Hamburger />
+            </Stack>
         </Toolbar>
         }
         {isDesktop &&
-          <Toolbar sx={{ justifyContent: 'flex-end' }}>
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
           <div sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img
               src={logo}
@@ -56,11 +61,15 @@ const Appbar = () => {
               }}
             />
           </div>
-          <Hamburger />
+          <Stack direction="row" spacing={2}>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <Hamburger />
+            </Stack>
+          {/* <Hamburger /> */}
         </Toolbar>
         }
         {isTablet && 
-          <Toolbar sx={{ justifyContent: 'flex-end' }}>
+          <Toolbar sx={{ justifyContent: 'space-between'}}>
           <div sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img
               src={logo}
@@ -71,12 +80,14 @@ const Appbar = () => {
               }}
             />
           </div>
-         
-          <Hamburger />
+          <Stack direction="row" spacing={2}>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <Hamburger />
+            </Stack>
         </Toolbar>
         }
         { isLaptop &&
-          <Toolbar sx={{ justifyContent: 'flex-end' }}>
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
           <div sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img
               src={logo}
@@ -87,7 +98,10 @@ const Appbar = () => {
               }}
             />
           </div>
-          <Hamburger />
+          <Stack direction="row" spacing={2}>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <Hamburger />
+            </Stack>
         </Toolbar>
         }
         
