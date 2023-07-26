@@ -22,9 +22,9 @@ export default function MyApp() {
       {/* <Barnav/> */}
     </div>
     <main xs = {{marginTop : 20}}>
-      <Form style = {{position : "fixed"}} setCheck={setCheck} check = {check}  updateCheck = {updateCheck}/>
-      <Download/>
-      <Tabel setCheck={setCheck} check = {check} setHideTable = {setHideTable} hideTable = {hideTable} updateCheck = {updateCheck}/>
+      <Form style = {{position : "fixed"}}/>
+      {/* <Download/> */}
+      {/* <Tabel setCheck={setCheck} check = {check} setHideTable = {setHideTable} hideTable = {hideTable} updateCheck = {updateCheck}/> */}
     </main>
     </>
   );

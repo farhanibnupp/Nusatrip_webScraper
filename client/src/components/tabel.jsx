@@ -5,20 +5,16 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import CircularProgress from '@mui/material/CircularProgress';
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import Form from "./form";
-
-// import { check, setCheck } from './form';
 
 import "../style/styles4.css";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
-
-const data2 = []
 
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
@@ -28,7 +24,13 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-export default function BasicTable({ setCheck, check, hideTable, setHideTable,updateCheck  }) {
+export default function BasicTable({
+  setCheck,
+  check,
+  hideTable,
+  setHideTable,
+  updateCheck,
+}) {
   const [data, setData] = useState([]);
   const [hide, setHide] = useState(false);
 
@@ -40,8 +42,7 @@ export default function BasicTable({ setCheck, check, hideTable, setHideTable,up
     setCheck(false);
     // data();
     console.log("ganss");
- 
-  }, [hideTable,check]);
+  }, [hideTable, check]);
 
   // useEffect(() => {
   //   // Fetch the data when the component mounts
@@ -57,7 +58,7 @@ export default function BasicTable({ setCheck, check, hideTable, setHideTable,up
   //     // setHide(false);
   //     // setHide(false)
   //   }
-   
+
   //   // if (check) {
   //   //   fetchData();
   //   //   setCheck(false);
@@ -72,12 +73,10 @@ export default function BasicTable({ setCheck, check, hideTable, setHideTable,up
 
       setData(response.data);
       // setHideTable(response.data.length === 0);
-      if(hideTable){
+      if (hideTable) {
         setHideTable(false);
         console.log("haloooooo");
       }
-      
-
       // progressValueElement.textContent = data;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -98,8 +97,12 @@ export default function BasicTable({ setCheck, check, hideTable, setHideTable,up
   // setInterval(fetchData, 3500);
   return (
     <div className="table">
-      {hideTable ? ( // Tampilkan atau sembunyikan tabel berdasarkan nilai hide
-        <div className="table-hidden">Tabel sedang bersembunyi...</div>
+      {hideTable ? (
+        // Tampilkan atau sembunyikan tabel berdasarkan nilai hide
+
+        <div className="table-hidden">
+          <CircularProgress />
+        </div>
       ) : (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

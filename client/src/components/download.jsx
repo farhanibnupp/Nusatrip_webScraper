@@ -1,7 +1,7 @@
 import * as React from "react";
 import "../style/styles4.css";
 import axios from "axios";
-import { Link } from "@mui/material";
+import { Link,Button } from "@mui/material";
 
 function download() {
 
@@ -11,7 +11,6 @@ function download() {
       const response = await axios.get("http://127.0.0.1:5000/download", {
         responseType: "blob", // Tell axios to treat the response as a binary object
       });
-
       // Create a URL for the blob data
       const url = window.URL.createObjectURL(new Blob([response.data]));
 
@@ -30,31 +29,15 @@ function download() {
       console.error("Error downloading data:", error);
     }
   };
-  // const fectDownload = async() =>{
-  //   try {
-  //     // if(Form.check){
-  //     //   const response = await axios.get("http://127.0.0.1:5000/printData");
-  //     //   setData(response.data);
-  //     // }
-  //     const response = await axios.get("http://127.0.0.1:5000/printData");
-  //     // setData(response.data);
-      
-  //     // progressValueElement.textContent = data;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-
-  // }
-
   return (
     <>
       <div className="">
         <form action="http://localhost:5000/download" method="POST">
           <div className="download">
             <p className="text-end">
-              <Link onClick={handleDownload}>
+              <Button variant="contained" onClick={handleDownload}>
                 Download data
-              </Link>
+              </Button>
             </p>
           </div>
         </form>

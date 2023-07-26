@@ -7,7 +7,7 @@ import ButtonGrup from './button.jsx';
 
 
 
-const Appbar = ({ onAdd, onRemove }) => {
+const Appbar = ({ onAdd, onRemove, readOnly }) => {
   const isMobileDevice = useMediaQuery({
     query: "(max-device-width: 480px) and (min-device-width: 320px)",
   });
@@ -44,7 +44,7 @@ const Appbar = ({ onAdd, onRemove }) => {
             />
           </div>
           <Stack direction="row" spacing={2}>
-            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove} readOnly = {readOnly}/>
             <Hamburger />
             </Stack>
         </Toolbar>
@@ -62,7 +62,7 @@ const Appbar = ({ onAdd, onRemove }) => {
             />
           </div>
           <Stack direction="row" spacing={2}>
-            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove} readOnly = {readOnly}/>
             <Hamburger />
             </Stack>
           {/* <Hamburger /> */}
@@ -81,7 +81,7 @@ const Appbar = ({ onAdd, onRemove }) => {
             />
           </div>
           <Stack direction="row" spacing={2}>
-            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove} readOnly = {readOnly}/>
             <Hamburger />
             </Stack>
         </Toolbar>
@@ -99,7 +99,7 @@ const Appbar = ({ onAdd, onRemove }) => {
             />
           </div>
           <Stack direction="row" spacing={2}>
-            <ButtonGrup onAdd={onAdd} onRemove={onRemove}/>
+            <ButtonGrup onAdd={onAdd} onRemove={onRemove} readOnly = {readOnly}/>
             <Hamburger />
             </Stack>
         </Toolbar>
