@@ -23,24 +23,68 @@ def run_file(file_name):
 
 @app.route('/scrapper' , methods=['POST', 'GET'])
 def param() :
-    global START_DATE,formatted_date,  PERIODS, DEPARTURE ,DESTINATION, to_labels, PLATFORM, formatted_date
+    global START_DATE,formatted_date,  PERIODS, DEPARTURE ,DESTINATION, to_labels, PLATFORM, formatted_date, iteration
+    global list_departure, list_destination,list_start_date,list_periods,list_platform
     if request.method == 'POST':
-        START_DATE = request.json.get('START_DATE1')
-        start_date_obj = datetime.strptime(START_DATE, '%Y-%m-%dT%H:%M:%S.%fZ')
+        list_departure = []
+        list_start_date = []
+        list_periods = []
+        list_destination = []
+        list_platform = []
+        iteration = (len(request.json))
+        # print(iteration)
+        # print(request.json)
+        data = request.json
+        # START_DATE[1] = request.json.get('START_DATE1')b 
+        for i in range(iteration):
+            DEPARTURE = data[i][f'DEPARTURE{i+1}']
+            DESTINATION = data[i][f'DESTINATION{i+1}']
 
-        # Assume the input date is in UTC. If it's in a different timezone, adjust accordingly.
-        input_timezone = pytz.timezone('UTC')
-        start_date_obj = input_timezone.localize(start_date_obj)
+            # START_DATE = data[i][f'START_DATE{i+1}']
+            # target_timezone = pytz.timezone('Asia/Jakarta')
+            # start_date_obj = START_DATE.astimezone(target_timezone)
+            # formatted_date = start_date_obj.strftime('%Y-%m-%d')
+            START_DATE = data[i][f'START_DATE{i+1}']
+            # Convert the START_DATE string to a datetime object
+            start_date_obj = datetime.fromisoformat(START_DATE[:-1])  # Removing the last 'Z' character
 
-        # Convert the date to a specific timezone (e.g., Asia/Jakarta).
-        target_timezone = pytz.timezone('Asia/Jakarta')
-        start_date_obj = start_date_obj.astimezone(target_timezone)
-        formatted_date = start_date_obj.strftime('%Y-%m-%d')
-        PERIODS = request.json.get('PERIODS1')
-        DEPARTURE = request.json.get('DEPARTURE1')
-        DESTINATION = request.json.get('DESTINATION1')
-        to_labels = [item.get("file_name") for item in request.json.get("PLATFORM1", [])]
-        PLATFORM = request.json.get('PLATFORM1')
+            # Perform the timezone conversion
+            target_timezone = pytz.timezone('Asia/Jakarta')
+            start_date_obj = start_date_obj.astimezone(target_timezone)
+
+            # Format the date as a string in 'YYYY-MM-DD' format
+            formatted_date = start_date_obj.strftime('%Y-%m-%d')
+            PERIODS = data[i][f'PERIODS{i+1}']
+            PLATFORM = data[i][f'PLATFORM{i+1}']
+            if isinstance(PLATFORM, dict):
+                PLATFORM_FILE_NAME = PLATFORM['file_name']
+            else:
+                PLATFORM_FILE_NAME = [item['file_name'] for item in PLATFORM]
+           
+            list_departure.append(DEPARTURE)
+            list_destination.append(DESTINATION)
+            list_start_date.append(formatted_date)
+            list_periods.append(PERIODS)
+            list_platform.append(PLATFORM_FILE_NAME)
+        # print(list_platform)
+        # start_date_obj = datetime.strptime(START_DATE, '%Y-%m-%dT%H:%M:%S.%fZ')
+
+        # # Assume the input date is in UTC. If it's in a different timezone, adjust accordingly.
+        # input_timezone = pytz.timezone('UTC')
+        # start_date_obj = input_timezone.localize(start_date_obj)
+
+        # # Convert the date to a specific timezone (e.g., Asia/Jakarta).
+        # target_timezone = pytz.timezone('Asia/Jakarta')
+        # start_date_obj = start_date_obj.astimezone(target_timezone)
+        # formatted_date = start_date_obj.strftime('%Y-%m-%d')
+
+        # PERIODS = request.json.get('PERIODS1')
+        # DEPARTURE = request.json.get('DEPARTURE1')
+        # # list_departure.append(DEPARTURE)
+        # # print(list_departure)
+        # DESTINATION = request.json.get('DESTINATION1')
+        # to_labels = [item.get("file_name") for item in request.json.get("PLATFORM1", [])]
+        # PLATFORM = request.json.get('PLATFORM1')
         main()
         return ""
 
@@ -122,21 +166,29 @@ def main():
     start_time = time.time()
     t_job = get_dataex('T_JOB', notif=False)
     job_id = list(t_job['ID'])[-1]
+    
     # data = ["46","01-09-2023", "1", "SIN", "CGK"]
     # insert_dataex(data)
     
     # data = [(job_id, "2023-09-08", "2", "SIN", "YIA")]
-    data = [(job_id, formatted_date, PERIODS, DEPARTURE, DESTINATION)]
-    insert_dataex(data)
+    # data = [(job_id, formatted_date, PERIODS, DEPARTURE, DESTINATION)]
+    for i in range(len(list_departure)):
+        data = [(job_id, list_start_date[i], list_periods[i], list_departure[i], list_destination[i])]
+        insert_dataex(data)
 
     # insert_dataex({"46","01-09-2023", "1", "SIN", "CGK"})
 
     # files = ["scraper_agoda.py","scraper_tiket.py","scraper_via.py","scraper_pegi.py","scraper_sky.py"]
     # files = ['nusatrip_webscrapper/scraper_booking.py','nusatrip_webscrapper/scraper_traveloka.py']
     # files = ['nusatrip_webscrapper/scraper_traveloka.py']
-    files = to_labels
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.map(run_file, files)
+    # files = to_labels
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     executor.map(run_file, files)
+
+    for i in range(len(list_platform)):
+        files = list_platform[i]
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(run_file, files)
 
     seconds = int(time.time() - start_time)
     minutes = seconds // 60

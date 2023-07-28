@@ -24,20 +24,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+// import { useFieldArray } from 'react-hook-form';
 
 const top100Films = ["CGK", "SIN", "YIA"];
-
-const filterOptions = (options, { inputValue }) => {
-  const inputValueLower = inputValue.toLowerCase();
-  return options
-    .filter((option) => option.label.toLowerCase().includes(inputValueLower))
-    .sort((a, b) => {
-      // Sort options by descending match order
-      const aIndex = a.label.toLowerCase().indexOf(inputValueLower);
-      const bIndex = b.label.toLowerCase().indexOf(inputValueLower);
-      return bIndex - aIndex;
-    });
-};
 
 const objOptions = [
   {
@@ -52,21 +41,119 @@ const objOptions = [
   { label: "Pegi Pegi", file_name: "nusatrip_webscrapper/scraper_pegi.py" },
 ];
 
-// const [check, getCheck] = useState(false);
-
-const myHelper = {
-  auto: {
-    required: "Email is Required",
-    pattern: "Invalid Email Address",
-  },
-};
 const Form = () => {
-  const { control, handleSubmit } = useForm({
-    reValidateMode: "onBlur",
-  });
+  const handleAddField = () => {
+    setSendList([
+      ...sendList,
+      {
+        id: sendList.length + 1,
+        [`DEPARTURE${sendList.length + 1}`]: "",
+        [`DESTINATION${sendList.length + 1}`]: "",
+        [`START_DATE${sendList.length + 1}`]: [],
+        [`PERIODS${sendList.length + 1}`]: "",
+        [`PLATFORM${sendList.length + 1}`]: "",
+      },
+    ]);
+  };
+
+  const [sendList, setSendList] = useState([
+    {
+      id: 1,
+      [`DEPARTURE${1}`]: "",
+      [`DESTINATION${1}`]: "",
+      [`START_DATE${1}`]: [],
+      [`PERIODS${1}`]: "",
+      [`PLATFORM${1}`]: "",
+    },
+  ]);
+
+  // const handleChange = (id, field, value) => {
+  //   const updatedList = sendList.map((person) =>
+  //     person.id === id ? { ...person, [field]: value } : person
+  //   );
+  //   setSendList(updatedList);
+  // };
+
+  // const handleClose = (id, field, value) => {
+  //   // Reset hobi to an empty array if no value is selected and the options are closed
+  //   if (field === `PLATFORM${id}` && value.length === 0) {
+  //     handleChange(id, field, []);
+  //   }
+  // };
+  const handleChange = (id, field, value) => {
+    const updatedList = sendList.map((person) =>
+      person.id === id ? { ...person, [field]: value } : person
+    );
+    setSendList(updatedList);
+  };
+
+  const handleClose = (id, field, value) => {
+    if (field === `PLATFORM${id}` && value.length === 0) {
+      handleChange(id, field, []);
+    }
+  };
+
+  const isplatformfilled = (platform) => {
+    return (
+      platform &&
+      platform.length > 0 
+      // platform.every((item) =>
+      //   objOptions.some((option) => option.label === item)
+      // )
+    );
+  };
+
+  const handleSubmit1 = (e) => {
+    e.preventDefault();
+    console.log("sendList:", sendList);
+    const isValidData = sendList.every(
+      (person) =>
+        person[`DEPARTURE${person.id}`] !== "" &&
+        person[`DESTINATION${person.id}`] !== "" &&
+        person[`START_DATE${person.id}`] !== "" &&
+        person[`PERIODS${person.id}`] !== "" &&
+        person[`PLATFORM${person.id}`].length > 0
+        // isplatformfilled(person[`PLATFORM${person.id}`])
+    );
+    console.log("isValidData:", isValidData);
+
+    if (isValidData) {
+      alert("Data yang Anda masukkan:\n" + JSON.stringify(sendList));
+      setHide(true);
+      setReadOnly(true);
+
+      axios
+        .post("http://127.0.0.1:5000/scrapper", sendList, {
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header to application/json
+          },
+        })
+        .then(() => {
+          console.log("cobaaa");
+          setHide(true);
+          setReadOnly(true);
+
+          if (sendList != 0) {
+            setHide(false);
+            setReadOnly(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      alert(
+        "Mohon isi semua field nama, tanggal lahir, dan hobi sebelum submit."
+      );
+    }
+  };
+  const handleRemoveLast = () => {
+    if (sendList.length > 1) {
+      setSendList(sendList.slice(0, sendList.length - 1));
+    }
+  };
 
   const [data, setData] = useState([]);
-
   const [hide, setHide] = useState(false);
   const [readOnly, setReadOnly] = useState(false);
 
@@ -75,9 +162,6 @@ const Form = () => {
     try {
       const response = await axios.get("http://127.0.0.1:5000/printData");
       setData(response.data);
-      // if(data != 0 ){
-      //   setHide(false);
-      // }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -90,19 +174,6 @@ const Form = () => {
     // newData();
   }, [hide, readOnly]);
 
-  // useEffect(()=>{
-  //   fetchData();
-  // });
-
-  // useEffect(() => {
-  //   // Mengubah nilai readOnly berdasarkan nilai check
-  //   if(check){
-  //     setReadOnly(true)
-  //   }else{
-  //     setReadOnly(false)
-  //   }
-  // } );
-
   const formatDate = (dateString) => {
     const options = {
       weekday: "short",
@@ -114,28 +185,18 @@ const Form = () => {
     return formattedDate;
   };
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "formFields", // Nama field array, bisa disesuaikan dengan kebutuhan
-  });
+  // const { fields, append, remove } = useFieldArray({
+  //   control,
+  //   name: "formFields", // Nama field array, bisa disesuaikan dengan kebutuhan
+  // });
   const onSubmit = (data) => {
-    const platforms = data.formFields.map((field) =>
-      field.PLATFORM1.map((option) => option.file_name)
-    );
+    // const { formFields, ...formData } = data;
+
     setHide(true);
     setReadOnly(true);
-    // Create a new data object without the 'formFields' property
-    const newData = {
-      ...data,
-      formFields: data.formFields.map(({ PLATFORM1, ...rest }) => ({
-        ...rest,
-      })),
-      PLATFORM1: platforms,
-    };
+
     axios
-      // .post("http://127.0.0.1:5000/api/submit-form", data, {
       .post("http://127.0.0.1:5000/scrapper", data, {
-        // .post("/api/submit-form", data ,{
         headers: {
           "Content-Type": "application/json", // Set the Content-Type header to application/json
         },
@@ -149,300 +210,288 @@ const Form = () => {
           setHide(false);
           setReadOnly(false);
         }
-        // setCheck(true);
-        // updateCheck(true);
-
-        // setHideTable(true);
-        // setReadOnly(true)
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  // const renderInputs = () => {
+  //   return fields.map((field, index) => (
+  //     <React.Fragment key={field.id}>
+  //         <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+  //           <Controller
+  //             control={control}
+  //             name={`DEPARTURE${index + 2}`}
+  //             render={({ field }) => (
+  //               <Autocomplete
+  //                 options={top100Films}
+  //                 onChange={(_, data) => field.onChange(data)}
+  //                 value={field.value}
+  //                 sx={{ backgroundColor: "white" }}
+  //                 disabled={readOnly}
+  //                 renderInput={(params) => (
+  //                   <TextField
+  //                   {...params}
+  //                     fullWidth
+  //                     variant="filled"
+  //                     label="Departure"
+  //                   />
+  //                 )}
+  //               />
+  //             )}
+  //           />
+  //         </Grid>
+  //         <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+  //           <Controller
+  //             control={control}
+  //             name={`DESTINATION${index + 2}`}
+  //             render={({ field }) => (
+  //               <Autocomplete
+  //                 options={top100Films}
+  //                 placeholder="Destination"
+  //                 onChange={(_, data) => field.onChange(data)}
+  //                 value={field.value}
+  //                 sx={{ backgroundColor: "white" }}
+  //                 disabled={readOnly}
+  //                 renderInput={(params) => (
+  //                   <TextField
+  //                     {...params}
+  //                     fullWidth
+  //                     variant="filled"
+  //                     label="Destination"
+  //                   />
+  //                 )}
+  //               />
+  //             )}
+  //           />
+  //         </Grid>
+  //         <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+  //           <Controller
+  //             control={control}
+  //             name={`START_DATE${index + 2}`}
+  //             render={({ field }) => (
+  //               <LocalizationProvider dateAdapter={AdapterDayjs}>
+  //                 <DatePicker
+  //                   sx={{ backgroundColor: "white" }}
+  //                   placeholderText="Select date"
+  //                   onChange={field.onChange}
+  //                   {...field}
+  //                   selected={field.value}
+  //                   disabled={readOnly}
+  //                   label="Start Date"
+  //                   slotProps={{
+  //                     textField: {
+  //                       placeholder: "depart",
+  //                       variant: "filled",
+  //                     },
+  //                   }}
+  //                   renderInput={(params) => (
+  //                     <TextField {...params}{...field} fullWidth variant="filled" />
+  //                   )}
+  //                 />
+  //               </LocalizationProvider>
+  //             )}
+  //           />
+  //         </Grid>
 
-  const renderInputs = () => {
-    return fields.map((field, index) => (
-      <React.Fragment key={field.id}>
-        {
-          // Skip index 0
-          <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-            <Controller
-              control={control}
-              name={`DEPARTURE${index + 2}`}
-              render={({ field }) => (
-                <Autocomplete
-                  options={top100Films}
-                  getOptionLabel={(option) => option.label}
-                  filterOptions={filterOptions} // Set the custom filter function
-                  onChange={(_, data) => field.onChange(data)}
-                  value={field.value}
-                  disabled={readOnly}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...field}
-                      fullWidth
-                      variant="filled"
-                      label="Departure"
-                    />
-                  )}
-                />
-              )}
-            />
-          </Grid>
-        }
-        {
-          <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-            <Controller
-              control={control}
-              name={`DESTINATION${index + 2}`}
-              render={({ field }) => (
-                <Autocomplete
-                  options={top100Films}
-                  placeholder="Destination"
-                  onChange={(_, data) => field.onChange(data)}
-                  value={field.value}
-                  sx={{ backgroundColor: "white" }}
-                  disabled={readOnly}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth
-                      variant="filled"
-                      label="Destination"
-                    />
-                  )}
-                />
-              )}
-            />
-          </Grid>
-        }
-        {
-          <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-            <Controller
-              control={control}
-              name={`START_DATE${index + 2}`}
-              render={({ field }) => (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    sx={{ backgroundColor: "white" }}
-                    placeholderText="Select date"
-                    onChange={field.onChange}
-                    selected={field.value}
-                    disabled={readOnly}
-                    label="Start Date"
-                    slotProps={{
-                      textField: {
-                        placeholder: "depart",
-                        variant: "filled",
-                      },
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth variant="filled" />
-                    )}
-                  />
-                </LocalizationProvider>
-              )}
-            />
-          </Grid>
-        }
-        {
-          <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-            <Controller
-              control={control}
-              name={`PERIODS${index + 2}`} // Ubah name menjadi "totalBill" karena ini adalah field "totalBill"
-              defaultValue=""
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  type="number"
-                  disabled={readOnly}
-                  sx={{ backgroundColor: "white" }}
-                  label="Periods"
-                  variant="filled"
-                  value={field.value} // Gunakan field.value sebagai nilai input
-                  onChange={field.onChange}
-                  inputProps={{ min: 0 }}
-                />
-              )}
-            />
-          </Grid>
-        }
-        {
-          <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-            <Controller
-              control={control}
-              name={`PLATFORM${index + 2}`}
-              render={({ field: { ref, onChange, ...field } }) => (
-                <Autocomplete
-                  multiple
-                  disabled={readOnly}
-                  options={objOptions}
-                  sx={{ backgroundColor: "white" }}
-                  getOptionLabel={(option) => option.label}
-                  onChange={(_, data) => onChange(data)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...field}
-                      {...params}
-                      fullWidth
-                      inputRef={ref}
-                      variant="filled"
-                      label="Platform"
-                    />
-                  )}
-                />
-              )}
-            />
-          </Grid>
-        }
-      </React.Fragment>
-    ));
-  };
-
+  //         <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+  //           <Controller
+  //             control={control}
+  //             name={`PERIODS${index + 2}`} // Ubah name menjadi "totalBill" karena ini adalah field "totalBill"
+  //             defaultValue=""
+  //             render={({ field }) => (
+  //               <TextField
+  //                 {...field}
+  //                 type="number"
+  //                 disabled={readOnly}
+  //                 {...field}
+  //                 sx={{ backgroundColor: "white" }}
+  //                 label="Periods"
+  //                 variant="filled"
+  //                 value={field.value} // Gunakan field.value sebagai nilai input
+  //                 onChange={field.onChange}
+  //                 inputProps={{ min: 0 }}
+  //               />
+  //             )}
+  //           />
+  //         </Grid>
+  //         <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+  //           <Controller
+  //             control={control}
+  //             name={`PLATFORM${index + 2}`}
+  //             render={({ field: { ref, onChange, ...field } }) => (
+  //               <Autocomplete
+  //                 multiple
+  //                 disabled={readOnly}
+  //                 options={objOptions}
+  //                 // {...field}
+  //                 sx={{ backgroundColor: "white" }}
+  //                 getOptionLabel={(option) => option.label}
+  //                 onChange={(_, data) => onChange(data)}
+  //                 renderInput={(params) => (
+  //                   <TextField
+  //                     {...field}
+  //                     {...params}
+  //                     fullWidth
+  //                     inputRef={ref}
+  //                     variant="filled"
+  //                     label="Platform"
+  //                   />
+  //                 )}
+  //               />
+  //             )}
+  //           />
+  //         </Grid>
+  //     </React.Fragment>
+  //   ));
+  // };
   return (
     <>
       <AppBar
-        onAdd={() => {
-          append({});
-        }}
-        onRemove={() => {
-          if (fields.length >= 1) {
-            remove(fields.length - 1);
-          }
-        }}
+        onAdd={handleAddField}
+        onRemove={handleRemoveLast}
         readOnly={readOnly}
       />
       <div className="rectangle-13">
         <div className="form">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit1}>
             <Grid container justifyContent="center" className="form-container">
               <Grid item container xs={10} sm={10} justifyContent="center">
-                <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-                  <Controller
-                    control={control}
-                    name="DEPARTURE1"
-                    render={({ field: { ref, onChange, ...field } }) => (
+                {sendList.map((person) => (
+                  <>
+                    <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                       <Autocomplete
                         options={top100Films}
-                        placeholder="Departure"
-                        onChange={(_, data) => onChange(data)}
-                        disabled={readOnly}
-                        sx={{ backgroundColor: "white" }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            {...field}
-                            fullWidth
-                            inputRef={ref}
-                            variant="filled"
-                            label="Departure"
-                          />
-                        )}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-                  <Controller
-                    control={control}
-                    name="DESTINATION1"
-                    render={({ field }) => (
-                      <Autocomplete
-                        options={top100Films}
-                        placeholder="Destination"
-                        onChange={(_, data) => field.onChange(data)}
-                        value={field.value}
-                        disabled={readOnly}
+                        placeholder="DEPARTURE"
+                        value={person[`DEPARTURE${person.id}`]}
+                        onChange={(e, value) =>
+                          handleChange(
+                            person.id,
+                            `DEPARTURE${person.id}`,
+                            value
+                          )
+                        }
+                        onClose={(e, value) =>
+                          handleClose(
+                            person.id,
+                            `DEPARUTURE${person.id}`,
+                            value
+                          )
+                        }
                         sx={{ backgroundColor: "white" }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
                             fullWidth
                             variant="filled"
-                            label="Destination"
+                            label="DEPARTURE"
                           />
                         )}
                       />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-                  <Controller
-                    control={control}
-                    name="START_DATE1"
-                    render={({ field }) => (
+                    </Grid>
+                    <Grid item xs={10} sm={2} style={{ margin: 5 }}>
+                      <Autocomplete
+                        options={top100Films}
+                        placeholder="DESTINATION"
+                        value={person[`DESTINATION${person.id}`]}
+                        onChange={(e, value) =>
+                          handleChange(
+                            person.id,
+                            `DESTINATION${person.id}`,
+                            value
+                          )
+                        }
+                        sx={{ backgroundColor: "white" }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            fullWidth
+                            variant="filled"
+                            label="DESTINATION"
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           sx={{ backgroundColor: "white" }}
                           placeholderText="Select date"
-                          onChange={field.onChange}
-                          disabled={readOnly}
-                          selected={field.value}
-                          label="Start Date"
-                          slotProps={{
-                            textField: {
-                              placeholder: "depart",
-                              variant: "filled",
-                              fullWidth: true,
-                            },
-                          }}
+                          // onChange={(e) =>
+                          //   handleChange(
+                          //     person.id,
+                          //     `START_DATE${person.id}`,
+                          //     e.target.value
+                          //   )
+                          // }
+                          onChange={(newValue) =>
+                            handleChange(
+                              person.id,
+                              `START_DATE${person.id}`,
+                              newValue
+                            )
+                          }
+                          // onAccept={(date) =>
+                          //   handleChange(
+                          //     person.id,
+                          //     `START_DATE${person.id}`,
+                          //     date
+                          //   )
+                          // }
                           renderInput={(params) => (
-                            <TextField {...params} fullWidth variant="filled" />
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              fullWidth
+                            />
                           )}
+                          value={person[`START_DATE${person.id}`]}
+                          // selected={value}
+                          fullWidth
+                          required
                         />
                       </LocalizationProvider>
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-                  <Controller
-                    control={control}
-                    name="PERIODS1" // Ubah name menjadi "totalBill" karena ini adalah field "totalBill"
-                    defaultValue=""
-                    render={({ field }) => (
+                    </Grid>
+                    <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                       <TextField
-                        {...field}
                         type="number"
-                        disabled={readOnly}
-                        fullWidth
+                        // disabled={readOnly}
                         sx={{ backgroundColor: "white" }}
                         label="Periods"
                         variant="filled"
-                        value={field.value} // Gunakan field.value sebagai nilai input
-                        onChange={field.onChange}
+                        value={person[`PERIODS${person.id}`]} // Gunakan field.value sebagai nilai input
+                        onChange={(e) =>
+                          handleChange(
+                            person.id,
+                            `PERIODS${person.id}`,
+                            e.target.value
+                          )
+                        }
                         inputProps={{ min: 0 }}
                       />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={10} sm={2} style={{ margin: 5 }}>
-                  <Controller
-                    control={control}
-                    name="PLATFORM1"
-                    render={({ field: { ref, onChange, ...field } }) => (
+                    </Grid>
+                    <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                       <Autocomplete
                         multiple
                         options={objOptions}
-                        disabled={readOnly}
-                        sx={{ backgroundColor: "white" }}
-                        getOptionLabel={(option) => option.label}
-                        onChange={(_, data) => onChange(data)}
+                        placeholder="Platform"
+                        onChange={(e, value) =>
+                          handleChange(person.id, `PLATFORM${person.id}`, value)
+                        }
+                        value={person[`PLATFORM${person.id}`] || []}
                         renderInput={(params) => (
                           <TextField
-                            {...field}
                             {...params}
+                            sx={{ backgroundColor: "white" }}
                             fullWidth
-                            inputRef={ref}
                             variant="filled"
-                            label="Platform"
+                            label="Auto-Complete"
                           />
                         )}
                       />
-                    )}
-                  />
-                </Grid>
-                {renderInputs()}
+                    </Grid>
+                  </>
+                ))}
               </Grid>
               <Grid
                 item
@@ -456,8 +505,6 @@ const Form = () => {
                   variant="contained"
                   sx={{ fontSize: "12px", height: 50 }}
                   color="primary"
-                  // onClick={setHide(true)}
-                  // onClick={setHide(true)}
                   disabled={readOnly}
                 >
                   Submit
