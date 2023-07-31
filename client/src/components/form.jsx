@@ -442,12 +442,12 @@ const Form = () => {
                             <TextField
                               {...params}
                               variant="outlined"
-                              fullWidth
+                              fullWidth = {true}
                             />
                           )}
                           value={person[`START_DATE${person.id}`]}
                           // selected={value}
-                          fullWidth
+                          fullWidth = {true}
                           required
                         />
                       </LocalizationProvider>
@@ -458,6 +458,7 @@ const Form = () => {
                         // disabled={readOnly}
                         sx={{ backgroundColor: "white" }}
                         label="Periods"
+                        fullWidth
                         variant="filled"
                         value={person[`PERIODS${person.id}`]} // Gunakan field.value sebagai nilai input
                         onChange={(e) =>

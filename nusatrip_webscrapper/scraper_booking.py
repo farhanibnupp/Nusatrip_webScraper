@@ -13,7 +13,9 @@ job_id = list(t_job['ID'])[-1]
 # job_id = 1
 
 t_params = get_dataex('PARAM', notif=False)
-params = t_params[t_params['JOB_ID'] == job_id]
+max_id = t_params['ID'].max()
+print(max_id)
+params = t_params[(t_params['JOB_ID'] == job_id) & (t_params['ID'] == max_id)]
 # params = t_params[t_params['JOB_ID'] == 45]
 print(job_id)
 print(params)

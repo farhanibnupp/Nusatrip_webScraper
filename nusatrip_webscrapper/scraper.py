@@ -1641,27 +1641,27 @@ def get_dataTraveloka(job_id, date, departure, destination):
 
     time.sleep(random.uniform(2,4))
     # Get scroll height
-    # last_height = driver.execute_script("return document.body.scrollHeight")
-    # while True:
-    #     # Scroll down to bottom
-    #     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    #     # Wait to load page
-    #     time.sleep(random.uniform(2,2.5))
+        # Wait to load page
+        time.sleep(random.uniform(2,2.5))
 
-    #     # Calculate new scroll height and compare with last scroll height
-    #     new_height = driver.execute_script("return document.body.scrollHeight")
-    #     if new_height == last_height:
-    #         break
-    #     last_height = new_height
-    # time.sleep(random.uniform(5,6))
-    # # Scroll to top of the page
-    # driver.execute_script("window.scrollTo(0, 0);")
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+    time.sleep(random.uniform(5,6))
+    # Scroll to top of the page
+    driver.execute_script("window.scrollTo(0, 0);")
 
     # aman 99,99 %
     data = []
     list_airlines = driver.find_elements(By.XPATH, '//div[@class="css-1dbjc4n r-9nbb9w r-otx420 r-1i1ao36 r-1x4r79x"]')
-    for i in range(2):
+    for i in range(len(list_airlines)):
     # for i in range(len(list_airlines)):
             try:
                 details = driver.find_elements(By.XPATH, '//div[@class="css-1dbjc4n r-1awozwy r-1xr2vsu r-13awgt0 r-18u37iz r-1w6e6rj r-3mtglp r-1x4r79x"]/div[1]')[i].click()

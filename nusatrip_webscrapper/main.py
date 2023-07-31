@@ -175,6 +175,9 @@ def main():
     for i in range(len(list_departure)):
         data = [(job_id, list_start_date[i], list_periods[i], list_departure[i], list_destination[i])]
         insert_dataex(data)
+        files = list_platform[i]
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(run_file, files)
 
     # insert_dataex({"46","01-09-2023", "1", "SIN", "CGK"})
 
@@ -185,10 +188,10 @@ def main():
     # with concurrent.futures.ThreadPoolExecutor() as executor:
     #     executor.map(run_file, files)
 
-    for i in range(len(list_platform)):
-        files = list_platform[i]
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            executor.map(run_file, files)
+    # for i in range(len(list_platform)):
+    #     files = list_platform[i]
+    #     with concurrent.futures.ThreadPoolExecutor() as executor:
+    #         executor.map(run_file, files)
 
     seconds = int(time.time() - start_time)
     minutes = seconds // 60
