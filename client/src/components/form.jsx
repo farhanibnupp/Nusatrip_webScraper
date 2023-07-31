@@ -415,8 +415,9 @@ const Form = () => {
                     <Grid item xs={10} sm={2} style={{ margin: 5 }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
-                          sx={{ backgroundColor: "white" }}
+                          sx={{ backgroundColor: "white", width: "100%" }}
                           placeholderText="Select date"
+                          
                           // onChange={(e) =>
                           //   handleChange(
                           //     person.id,

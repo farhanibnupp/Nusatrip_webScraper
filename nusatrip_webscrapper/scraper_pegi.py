@@ -13,7 +13,10 @@ t_mapping = get_data('T_AIRPORT_MAPPING', notif=False)
 job_id = 1
 
 t_params = get_data('EX_PARAM', notif=False)
-params = t_params[t_params['JOB_ID'] == job_id]
+max_id = t_params['ID'].max()
+print(max_id)
+params = t_params[(t_params['JOB_ID'] == job_id) & (t_params['ID'] == max_id)]
+# params = t_params[t_params['JOB_ID'] == job_id]
 
 for i,j in params.iterrows():
     start_date =j['START_DATE']
